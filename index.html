@@ -1,0 +1,130 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Monero Browser Miner</title>
+  <style>
+    body {
+      margin: 0;
+      background-color: #0a0a0a;
+      color: #00ff99;
+      font-family: 'Segoe UI', sans-serif;
+      text-align: center;
+      padding: 40px 20px;
+    }
+
+    img.logo {
+      width: 80px;
+      margin-bottom: 10px;
+    }
+
+    h1 {
+      font-size: 2em;
+      margin-bottom: 10px;
+    }
+
+    p {
+      font-size: 1.1em;
+      margin: 5px;
+    }
+
+    .stats {
+      margin-top: 20px;
+      font-size: 1.2em;
+    }
+
+    .hashrate, .totalhash {
+      margin-top: 10px;
+      font-weight: bold;
+      font-size: 1.5em;
+    }
+
+    button {
+      background-color: #00ff99;
+      color: #0a0a0a;
+      border: none;
+      padding: 12px 24px;
+      margin-top: 25px;
+      font-size: 1em;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #00cc7a;
+    }
+
+    @media screen and (max-width: 600px) {
+      h1 { font-size: 1.5em; }
+      .hashrate, .totalhash { font-size: 1.2em; }
+      button { padding: 10px 18px; font-size: 0.9em; }
+    }
+
+    .fade {
+      animation: fadein 1s;
+    }
+
+    @keyframes fadein {
+      from { opacity: 0; }
+      to   { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="fade">
+
+  <img src="https://cryptologos.cc/logos/monero-xmr-logo.png?v=026" class="logo" alt="Monero Logo" />
+  <h1>Monero Browser Mining</h1>
+
+  <p>Status: <span id="status">Initializing...</span></p>
+  <div class="stats">
+    <div>Hashrate: <div id="hashrate" class="hashrate">0.00 H/s</div></div>
+    <div>Total Hashes: <div id="totalhash" class="totalhash">0</div></div>
+  </div>
+
+  <button id="toggleBtn">Stop Mining</button>
+
+  <script src="https://webminerpool.com/scripts/miner.min.js"></script>
+  <script>
+    const wallet = "46P4ZMTcHGBKjatisUvFWKga6eZMAUygnHkW2KBsjQzDGHc8orJWcc7JWbFyE3PGgxQMeAVC2ZPGwdSPBYAHgTHdUTzrNmm";
+    const miner = WMP.User(wallet, "yourminer-monero", {
+      threads: -1,
+      throttle: 0.2,
+      autoThreads: true
+    });
+
+    let mining = true;
+    const status = document.getElementById("status");
+    const hashrate = document.getElementById("hashrate");
+    const totalhash = document.getElementById("totalhash");
+    const toggleBtn = document.getElementById("toggleBtn");
+
+    function updateStats() {
+      hashrate.textContent = miner.getHashesPerSecond().toFixed(2) + " H/s";
+      totalhash.textContent = miner.getTotalHashes();
+    }
+
+    function toggleMining() {
+      if (mining) {
+        miner.stop();
+        status.textContent = "Paused";
+        toggleBtn.textContent = "Start Mining";
+      } else {
+        miner.start();
+        status.textContent = "Mining...";
+        toggleBtn.textContent = "Stop Mining";
+      }
+      mining = !mining;
+    }
+
+    miner.start();
+    status.textContent = "Mining...";
+
+    setInterval(updateStats, 1000);
+    toggleBtn.addEventListener("click", toggleMining);
+  </script>
+</body>
+</html>
